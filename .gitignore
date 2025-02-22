@@ -1,0 +1,5 @@
+*.o
+*.bin
+*.ch8
+a.out
+chip8

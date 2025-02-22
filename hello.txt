@@ -1,0 +1,12 @@
+00E0    ; CLS
+A20A    ; LD I, 0x300  (Move sprite data to 0x300)
+D005    ; Draw sprite
+F015    ; Set delay timer
+1206    ; Jump to 0x206
+
+; Move sprite data outside execution space
+300: F8
+301: 88
+302: 88
+303: 88
+304: F8
