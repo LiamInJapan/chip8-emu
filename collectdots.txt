@@ -1,0 +1,59 @@
+; Collect the Dots CHIP-8 Game
+; V0 = Player X, V1 = Player Y
+; V2 = Dot X, V3 = Dot Y
+; V4 = Score Counter
+
+00E0        ; CLS (clear screen)
+A300        ; LD I, 0x300 (set sprite memory)
+
+6005        ; LD V0, 5 (player X)
+6105        ; LD V1, 5 (player Y)
+C220        ; RND V2, 32 (randomize dot X)
+C320        ; RND V3, 32 (randomize dot Y)
+6400        ; LD V4, 0 (score = 0)
+
+; Main Game Loop
+120A        ; JP MAIN_LOOP
+
+; Movement Handler
+MOVE_UP:
+  7101      ; ADD V1, 1 (move up)
+  120A      ; JP MAIN_LOOP
+
+MOVE_DOWN:
+  710F      ; SUB V1, 1 (move down)
+  120A      ; JP MAIN_LOOP
+
+MOVE_LEFT:
+  7001      ; ADD V0, 1 (move left)
+  120A      ; JP MAIN_LOOP
+
+MOVE_RIGHT:
+  700F      ; SUB V0, 1 (move right)
+  120A      ; JP MAIN_LOOP
+
+; Main Loop
+MAIN_LOOP:
+  EX9E      ; SKP V0 (if key pressed)
+  120A      ; JP MAIN_LOOP (loop until keypress)
+
+  3E02      ; SE V0, 2 (if key 2 pressed)
+  1206      ; JP MOVE_UP
+
+  3E08      ; SE V0, 8 (if key 8 pressed)
+  1212      ; JP MOVE_DOWN
+
+  3E04      ; SE V0, 4 (if key 4 pressed)
+  121E      ; JP MOVE_LEFT
+
+  3E06      ; SE V0, 6 (if key 6 pressed)
+  122A      ; JP MOVE_RIGHT
+
+; Collision Detection (Check if Player X == Dot X, Y == Dot Y)
+  5023      ; SE V0, V2 (if playerX == dotX)
+  5231      ; SE V1, V3 (if playerY == dotY)
+  6401      ; ADD V4, 1 (increment score)
+  C220      ; RND V2, 32 (spawn new dot X)
+  C320      ; RND V3, 32 (spawn new dot Y)
+
+  120A      ; JP MAIN_LOOP (loop)
